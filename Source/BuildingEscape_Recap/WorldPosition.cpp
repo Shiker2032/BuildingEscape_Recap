@@ -18,11 +18,22 @@ UWorldPosition::UWorldPosition()
 void UWorldPosition::BeginPlay()
 {
 	Super::BeginPlay();
+	/*
+	FString message = TEXT("Message");
+	FString* messagePtr = &message;
 
-	UE_LOG(LogTemp, Warning, TEXT("This is a message"));
-	UE_LOG(LogTemp, Error, TEXT("This is error"));
-	UE_LOG(LogTemp, Display, TEXT("This is a displayMessage"));
+	UE_LOG(LogTemp, Warning, TEXT("%s"), **messagePtr);
+
+	FString ObjectName = GetOwner()->GetName()
+	*/
+
+	//Получить расположение объекта
+
 	
+	FString Owner = GetOwner()->GetName();
+	FString Position = GetOwner()->GetActorLocation().ToString();
+
+	UE_LOG(LogTemp, Warning, TEXT("i'm mighty %s, my position is %s"), *Owner, *Position);
 }
 
 
