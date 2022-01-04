@@ -16,22 +16,39 @@ UOpenDoor::UOpenDoor()
 // Called when the game starts
 void UOpenDoor::BeginPlay()
 {
-	Super::BeginPlay();	
-	
+	Super::BeginPlay();		
 }
 
 
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);	
-	OpenDoor(DeltaTime);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+	
+	
+	if ((PressurePlate) && (PressurePlate->IsOverlappingActor(ActorThatOpens))) {
+		OpenDoor(DeltaTime);
+		DoorLastOpened = GetWorld()->GetTimeSeconds();
+		
+	}
+	else if (DoorLastOpened + CloseDelay < GetWorld()->GetTimeSeconds()) {
+		CloseDoor(DeltaTime);
+	}
 }
 
 void UOpenDoor::OpenDoor(float DeltaTime)
 {
 	FRotator Rotation = GetOwner()->GetActorRotation();
-	CurrentYaw = FMath::Lerp(CurrentYaw, TargetYaw, DeltaTime * 0.5f);
+	CurrentYaw = FMath::Lerp(CurrentYaw, TargetYaw, DeltaTime * 1.f);
+	Rotation.Yaw = CurrentYaw;
+	GetOwner()->SetActorRotation(Rotation);
+}
+
+void UOpenDoor::CloseDoor(float DeltaTime)
+{
+	FRotator Rotation = GetOwner()->GetActorRotation();
+	CurrentYaw = FMath::Lerp(CurrentYaw, InitialYaw, DeltaTime * 1.f);
 	Rotation.Yaw = CurrentYaw;
 	GetOwner()->SetActorRotation(Rotation);
 }
