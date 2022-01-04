@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Components/ActorComponent.h"
+#include "DrawDebugHelpers.h"
 #include "Grabber.h"
 
 #define OUT
@@ -31,13 +32,34 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
+	FVector LineTraceDirection;
+	FVector LineTraceEnd;
+
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
 		OUT PlayerViewPointLocation,
 		OUT PlayerViewPointRotation
 	);
-	UE_LOG(LogTemp, Warning, TEXT("location: %s Rotation: %s "),
-		*PlayerViewPointLocation.ToString(),
-		*PlayerViewPointRotation.ToString()
+	
+	LineTraceDirection = PlayerViewPointRotation.Vector();
+	
+	LineTraceEnd = PlayerViewPointLocation + LineTraceDirection * Reach;
+	
+	UE_LOG(LogTemp, Warning, TEXT("Begin: %s End: %s "),
+		*LineTraceDirection.ToString(),
+		*LineTraceEnd.ToString()
 	);
+
+	//Нарисовать дебаг лазер
+	DrawDebugLine(
+		GetWorld(),
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FColor(0, 255, 0),
+		false,
+		0,
+		0,
+		5.f
+	);
+
 }
 
