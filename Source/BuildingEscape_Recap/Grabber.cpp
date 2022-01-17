@@ -4,6 +4,7 @@
 #include "DrawDebugHelpers.h"
 #include "Grabber.h"
 
+
 #define OUT
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -24,6 +25,8 @@ void UGrabber::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("Vrode Rabotaet"));
 
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	InputHandle = GetOwner()->FindComponentByClass<UInputComponent>();
+
 	if (!PhysicsHandle)
 	{
 		FString MissingComponent = GetOwner()->GetName();
@@ -33,6 +36,18 @@ void UGrabber::BeginPlay()
 	{
 		//something
 	}
+
+	if (!InputHandle) { return; }
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Input component found on %s"), *GetOwner()->GetName());
+		InputHandle->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}
+}
+
+void UGrabber::Grab() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grabber pressed"));
 }
 
 
@@ -91,5 +106,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *(ActorThatHit->GetName()));
 	}
 	*/
+	
 }
 
