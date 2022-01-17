@@ -22,6 +22,17 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 	
 	UE_LOG(LogTemp, Warning, TEXT("Vrode Rabotaet"));
+
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (!PhysicsHandle)
+	{
+		FString MissingComponent = GetOwner()->GetName();
+		UE_LOG(LogTemp, Error, TEXT("there is no physHandle On: %s"), *MissingComponent);
+	}
+	else
+	{
+		//something
+	}
 }
 
 
@@ -43,11 +54,12 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	LineTraceDirection = PlayerViewPointRotation.Vector();
 	
 	LineTraceEnd = PlayerViewPointLocation + LineTraceDirection * Reach;
-	
+	/*
 	UE_LOG(LogTemp, Warning, TEXT("Begin: %s End: %s "),
 		*LineTraceDirection.ToString(),
 		*LineTraceEnd.ToString()
 	);
+	*/
 
 	//Нарисовать дебаг лазер
 	DrawDebugLine(
@@ -73,10 +85,11 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		TraceParams
 	);
 
-	
+	/*
 	AActor* ActorThatHit = Hit.GetActor();
 	if (ActorThatHit) {
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *(ActorThatHit->GetName()));
 	}
+	*/
 }
 
